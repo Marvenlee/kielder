@@ -1,0 +1,6 @@
+
+.PHONY : home/disk
+home/disk :
+	mcopy -o home/test.sh c:/home
+	
+
