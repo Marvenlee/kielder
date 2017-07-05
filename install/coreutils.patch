@@ -1,0 +1,86 @@
+diff -urN coreutils-5.2.1/config/config.rpath coreutils-5.2.1_new/config/config.rpath
+--- coreutils-5.2.1/config/config.rpath	2004-01-12 20:47:46.000000000 +0000
++++ coreutils-5.2.1_new/config/config.rpath	2007-08-06 14:46:51.250000000 +0100
+@@ -149,6 +149,9 @@
+         ld_shlibs=no
+       fi
+       ;;
++    kielder*)
++      ld_shlibs=no
++      ;;
+     cygwin* | mingw* | pw32*)
+       # hardcode_libdir_flag_spec is actually meaningless, as there is
+       # no search path for DLLs.
+@@ -438,6 +441,8 @@
+     ;;
+   beos*)
+     ;;
++  kielder*)
++    ;;
+   bsdi4*)
+     ;;
+   cygwin* | mingw* | pw32*)
+diff -urN coreutils-5.2.1/config/config.sub coreutils-5.2.1_new/config/config.sub
+--- coreutils-5.2.1/config/config.sub	2004-02-22 15:50:24.000000000 +0000
++++ coreutils-5.2.1_new/config/config.sub	2007-08-06 14:45:43.109375000 +0100
+@@ -1157,7 +1157,7 @@
+ 	      | -udi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
+ 	      | -chorusos* | -chorusrdb* \
+ 	      | -cygwin* | -pe* | -psos* | -moss* | -proelf* | -rtems* \
+-	      | -mingw32* | -linux-gnu* | -linux-uclibc* | -uxpv* | -beos* | -mpeix* | -udk* \
++	      | -mingw32* | -linux-gnu* | -linux-uclibc* | -uxpv* | -beos* | -kielder* | -mpeix* | -udk* \
+ 	      | -interix* | -uwin* | -mks* | -rhapsody* | -darwin* | -opened* \
+ 	      | -openstep* | -oskit* | -conix* | -pw32* | -nonstopux* \
+ 	      | -storm-chaos* | -tops10* | -tenex* | -tops20* | -its* \
+@@ -1181,7 +1181,7 @@
+ 		os=`echo $os | sed -e 's|nto|nto-qnx|'`
+ 		;;
+ 	-sim | -es1800* | -hms* | -xray | -os68k* | -none* | -v88r* \
+-	      | -windows* | -osx | -abug | -netware* | -os9* | -beos* \
++	      | -windows* | -osx | -abug | -netware* | -os9* | -beos* | -kielder* \
+ 	      | -macos* | -mpw* | -magic* | -mmixware* | -mon960* | -lnews*)
+ 		;;
+ 	-mac*)
+@@ -1367,6 +1367,9 @@
+ 	*-be)
+ 		os=-beos
+ 		;;
++	*-kielder)
++		os=-kielder
++		;;
+ 	*-ibm)
+ 		os=-aix
+ 		;;
+@@ -1478,6 +1481,9 @@
+ 			-beos*)
+ 				vendor=be
+ 				;;
++			-kielder*)
++				vendor=kiel
++				;;
+ 			-hpux*)
+ 				vendor=hp
+ 				;;
+diff -urN coreutils-5.2.1/configure coreutils-5.2.1_new/configure
+--- coreutils-5.2.1/configure	2004-03-11 08:58:12.000000000 +0000
++++ coreutils-5.2.1_new/configure	2007-08-06 14:47:25.093750000 +0100
+@@ -8349,6 +8349,7 @@
+        bsdi*)		os='BSD/OS';;
+        bsd*)		os='BSD';;
+        beos*)		os='BeOS';;
++       kielder*)	os='Kielder';;
+        aux*)		os='A/UX';;
+        atheos*)		os='AtheOS';;
+        amigaos*)	os='Amiga OS';;
+diff -urN coreutils-5.2.1/lib/path-concat.c coreutils-5.2.1_new/lib/path-concat.c
+--- coreutils-5.2.1/lib/path-concat.c	2003-09-10 07:26:02.000000000 +0100
++++ coreutils-5.2.1_new/lib/path-concat.c	2007-08-06 16:16:31.171875000 +0100
+@@ -24,7 +24,7 @@
+ #endif
+ 
+ #ifndef HAVE_MEMPCPY
+-# define mempcpy(D, S, N) ((void *) ((char *) memcpy (D, S, N) + (N)))
++/* FIX # define mempcpy(D, S, N) ((void *) ((char *) memcpy (D, S, N) + (N))) */
+ #endif
+ 
+ #include <stdio.h>
